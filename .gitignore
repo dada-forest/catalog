@@ -1,0 +1,10 @@
+.env
+*scratch*
+*.bak
+venv/
+tmp/
+*.pyc
+.ruff_cache/
+.terraform/
+**/files/id_rsa.pub
+__pycache__/

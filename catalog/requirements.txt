@@ -1,0 +1,9 @@
+fastapi[all]
+pytest
+pytest-sugar
+python-dotenv
+ruff
+alembic
+psycopg2-binary
+requests
+fire
