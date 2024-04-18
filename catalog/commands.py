@@ -20,8 +20,7 @@ def init_db():
 
 class DataLoader:
     def load_seed_document_data(self):
-        """Loads document data from a list of urls found in url_sources.json.
-        """
+        """Loads document data from a list of urls found in url_sources.json."""
         with open("url_sources.json", "r") as f:
             data = json.load(f)
             documents = []
@@ -46,11 +45,11 @@ class DataLoader:
                         # TODO: Need to add some logging here.
                         print(e)
 
-
     def hello(self, greeting):
         """Make sure it's working."""
-        
+
         print(f"Hello {greeting}!")
+
 
 if __name__ == "__main__":
     fire.Fire(DataLoader)

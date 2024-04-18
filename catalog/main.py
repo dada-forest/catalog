@@ -39,3 +39,24 @@ async def documents():
         data = documents.all()
 
     return data
+
+
+@app.get("/documents/search/{term}")
+async def documents(term: str):
+    """Simple query to see if search term is contained in a string field."""
+
+    data = {"term": term}
+
+    with Session(engine) as session:
+        query = (
+            session.query(Document)
+            .options(
+                load_only(
+                    Document.id, Document.identifier, Document.url, Document.description
+                )
+            )
+            .filter(Document.description.like(f"%{term}%"))
+        )
+        data["data"] = query.all()
+
+    return data
