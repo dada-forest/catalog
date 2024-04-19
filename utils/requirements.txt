@@ -1,10 +1,6 @@
-fastapi[all]
-pytest
-pytest-sugar
+typer
 python-dotenv
 ruff
-alembic
 psycopg2-binary
 requests
-fire
 SQLAlchemy
