@@ -3,6 +3,8 @@ import typer
 from dotenv import dotenv_values
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session, load_only, scoped_session, sessionmaker
+from sentence_transformers import SentenceTransformer
+import psycopg2
 
 config = dotenv_values("../.env")
 
@@ -35,10 +37,19 @@ def create_vector_data():
     """
 
     print("Creating Document vector data.")
+
+    model = SentenceTransformer("all-MiniLM-L6-v2")
     documents = _get_documents()
-    print(documents)
-
-
+    with psycopg2.connect(db_url) as conn:
+        with conn.cursor() as cursor:
+            for doc in documents:
+                id = doc[0]
+                description = doc[2]
+                embeddings = model.encode(description)
+                # d = {"embedding": embeddings.tolist()}
+                sql = """UPDATE documents SET embedding = %s WHERE id = %s"""
+                cursor.execute(sql, (embeddings.tolist(), id))
+                
 
 if __name__ == "__main__":
     app()

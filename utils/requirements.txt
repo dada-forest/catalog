@@ -4,3 +4,4 @@ ruff
 psycopg2-binary
 requests
 SQLAlchemy
+sentence-transformers
