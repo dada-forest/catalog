@@ -46,7 +46,6 @@ def create_vector_data():
                 id = doc[0]
                 description = doc[2]
                 embeddings = model.encode(description)
-                # d = {"embedding": embeddings.tolist()}
                 sql = """UPDATE documents SET embedding = %s WHERE id = %s"""
                 cursor.execute(sql, (embeddings.tolist(), id))
                 
