@@ -4,6 +4,8 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse, HTMLResponse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, load_only
+from sentence_transformers import SentenceTransformer
+import psycopg2
 from models import Document
 
 POSTGRES_USER = os.environ.get("POSTGRES_USER")
@@ -60,3 +62,28 @@ async def documents(term: str):
         data["data"] = query.all()
 
     return data
+
+@app.get("/documents/vector/search/{term}")
+async def vector_seaarch_documents(term: str):
+    """Vector database search on a document description."""
+
+    resp = {"term": term}
+    model = SentenceTransformer("all-MiniLM-L6-v2")
+    embedding = model.encode(term).tolist()
+    embeddings = ",".join(str(e) for e in embedding)
+    embeddings = f"'[{embeddings}]'"
+    sql = f"""SELECT id, description, 1 - (embedding <=> {embeddings}) AS cosine_similarity FROM documents ORDER BY cosine_similarity DESC"""
+
+    documents = []
+    with psycopg2.connect(db_url) as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, embedding)
+            for row in cursor.fetchall():
+                documents.append({
+                    "id": row[0],
+                    "description": row[1]
+                })
+    
+    resp["data"] = documents
+
+    return resp

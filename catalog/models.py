@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String, DateTime
+from pgvector.sqlalchemy import Vector
 from datetime import datetime
 from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import DeclarativeBase
 
 Base = declarative_base()
 target_metadata = Base.metadata
-
+N_DIM = 1536
 
 class Document(Base):
     __tablename__ = "documents"
@@ -16,3 +16,5 @@ class Document(Base):
     description = Column(String(2500), unique=False, nullable=True)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    embedding = Vector(N_DIM)
+

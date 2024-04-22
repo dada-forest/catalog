@@ -8,3 +8,5 @@ psycopg2-binary
 requests
 fire
 SQLAlchemy
+sentence-transformers
+# pgvector
