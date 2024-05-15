@@ -8,3 +8,4 @@ sqlalchemy
 alembic
 requests
 ruff
+bs4

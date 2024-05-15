@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from models import Document, Base
 import os
+from bs4 import BeautifulSoup
 
 POSTGRES_USER = os.environ.get("POSTGRES_USER")
 POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
@@ -19,7 +20,7 @@ def cli():
     pass
 
 
-@click.command("load_seed_docs")
+@click.command()
 def load_seed_docs():
     print("Loading seed docs.")
 
@@ -49,6 +50,23 @@ def load_seed_docs():
                 print(e)
 
 
+@click.command()
+def scrape_downloadable_national_datasets():
+    metadata_hrefs = []
+    base_url = "https://data.fs.usda.gov/geodata/edw/datasets.php"
+    resp = requests.get(base_url)
+    soup = BeautifulSoup(resp.content, "html.parser")
+    table = soup.find("table", class_="fcTable")
+    for i, row in enumerate(table.find_all("tr")):
+        td = row.find("td", class_="metaLink") 
+        if td:
+            anchors = td.find_all("a")
+            if anchors[0]["href"]:
+                href = anchors[0]["href"]
+                metadata_hrefs.append(href)
+    print(metadata_hrefs)
+
 if __name__ == "__main__":
     cli.add_command(load_seed_docs)
+    cli.add_command(scrape_downloadable_national_datasets)
     cli()

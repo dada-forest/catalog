@@ -2,7 +2,7 @@ SHELL := bash
 .ONESHELL:
 .SHELLFLAGS := -eu -o pipefail -c
 
-.PHONY: build shell chown dev_server dcu dcs fmt
+.PHONY: build shell chown dev_server dcu dcs fmt, bash
 
 
 build:
@@ -23,6 +23,9 @@ dcs:
 
 fmt:
 	docker run -v $(PWD):/catalog -it catalog:latest ruff format .
+
+bash:
+	docker run -v $(PWD):/catalog -it catalog:latest bash
 
 # dcu:
 # 	docker compose -f compose.yml up -d --build
