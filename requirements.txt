@@ -1,0 +1,10 @@
+fastapi
+click
+python-dotenv
+pytest
+pytest-sugar
+psycopg2-binary
+sqlalchemy
+alembic
+requests
+ruff

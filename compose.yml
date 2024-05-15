@@ -1,0 +1,30 @@
+services:
+
+  catalog:
+    container_name: catalog
+    build: .
+    image: catalog
+    env_file: .env    
+    ports:
+      - 8000:8000
+    volumes:
+      - $PWD:/catalog
+    depends_on:
+      - pgdb
+    tty: true
+    stdin_open: true
+    # restart: unless-stopped
+    command: "fastapi dev main.py --host 0.0.0.0 --reload"
+
+  pgdb:
+      container_name: catalog_pgdb
+      image: ankane/pgvector
+      ports:
+        - 5432:5432
+      env_file:
+        - .env
+      volumes:
+        - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
