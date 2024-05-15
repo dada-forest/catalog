@@ -1,7 +1,0 @@
-typer
-python-dotenv
-ruff
-psycopg2-binary
-requests
-SQLAlchemy
-sentence-transformers
