@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import click
 import json
 import requests
@@ -57,14 +59,29 @@ def scrape_downloadable_national_datasets():
     resp = requests.get(base_url)
     soup = BeautifulSoup(resp.content, "html.parser")
     table = soup.find("table", class_="fcTable")
-    for i, row in enumerate(table.find_all("tr")):
-        td = row.find("td", class_="metaLink") 
-        if td:
-            anchors = td.find_all("a")
-            if anchors[0]["href"]:
-                href = anchors[0]["href"]
-                metadata_hrefs.append(href)
-    print(metadata_hrefs)
+    rows = table.find_all("tr")
+    for row in rows:
+        cells = row.find_all("td")
+        title = cells[0].find("strong").get_text()
+        metadata_anchor = cells[1].find("a")
+        metadata_href = None
+        if metadata_anchor and metadata_anchor.get_text() == "metadata":
+            metadata_href = metadata_anchor["href"]
+
+        print(title, metadata_href)
+    # for i, row in enumerate(rows):
+    #     cells = row.find_all("td")
+    #     print(len(cells))
+        # for j, cell in enumerate(row.find_all("td")):
+        #     print(cell)
+        # td = row.find("td", class_="metaLink")        
+    #     if td:
+    #         anchors = td.find_all("a")
+    #         if anchors[0]["href"]:
+    #             href = anchors[0]["href"]
+    #             metadata_hrefs.append(href)
+    # print(metadata_hrefs)
+
 
 if __name__ == "__main__":
     cli.add_command(load_seed_docs)

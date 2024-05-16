@@ -31,23 +31,20 @@ class Document(Base):
     # embedding = Vector(N_DIM)
 
 
-# class User(Base):
-#     __tablename__ = "users"
+class USFSNationalDataset(Base):
+    __tablename__ = "usfs_national_dataset"
 
-#     id = Column(Integer, primary_key=True)
-#     email = Column(String, unique=True, index=True)
-#     hashed_password = Column(String)
-#     is_active = Column(Boolean, default=True)
-
-#     items = relationship("Item", back_populates="owner")
-
-
-# class Item(Base):
-#     __tablename__ = "items"
-
-#     id = Column(Integer, primary_key=True)
-#     title = Column(String, index=True)
-#     description = Column(String, index=True)
-#     owner_id = Column(Integer, ForeignKey("users.id"))
-
-#     owner = relationship("User", back_populates="items")
+    id = Column(Integer, primary_key=True)
+    title = Column(String(125), nullable=True, unique=True)
+    metadata_url = Column(String(500), unique=True, nullable=True)
+    description = Column(String(2500), unique=False, nullable=True)
+    purpose = Column(String(500), unique=False, nullable=True)
+    created_at = Column(
+        TIMESTAMP(timezone="TRUE"), nullable=False, server_default=text("now()")
+    )
+    updated_at = Column(
+        TIMESTAMP(timezone="TRUE"),
+        nullable=False,
+        server_default=text("now()"),
+        server_onupdate=text("now()"),
+    )

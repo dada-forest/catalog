@@ -4,7 +4,6 @@ SHELL := bash
 
 .PHONY: build shell chown dev_server dcu dcs fmt, bash
 
-
 build:
 	docker build -f Dockerfile -t catalog:latest .
 
